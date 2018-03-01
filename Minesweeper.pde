@@ -2,14 +2,14 @@ import de.bezier.guido.*;
 //Declare and initialize NUM_ROWS and NUM_COLS = 20
 public final static int NUM_ROWS = 20;
 public final static int NUM_COLS = 20;
-public final static int NUM_BOMBS = (int)(Math.random()*50);
+public final static int NUM_BOMBS = (int)(Math.random()*50)+50;
 private MSButton[][] buttons; //2d array of minesweeper buttons
  //ArrayList of just the minesweeper buttons that are mined
 private ArrayList <MSButton> bombs;
 //private ArrayList <MSButton> bombs= new ArrayList <MSButton>();
 void setup ()
 {
-    size(400, 400);
+    size(400, 500);
     textAlign(CENTER,CENTER);
     
     // make the manager
@@ -49,15 +49,13 @@ public boolean isWon()
 }
 public void displayLosingMessage()
 {
-    //fill(244, 244, 244);
-    //textSize(50);
-    //text("You Lose.", 200, 425);
-    //textSize(12);
-    //for(int i = 0; i < bombs.size(); i++) //display unmarked bombs
-    //{
-    //    if(!bombs.get(i).isMarked())
-    //        bombs.get(i).mousePressed();
-    //}
+    for(int r=0; r < NUM_ROWS;r++){
+      for(int c=0; c < NUM_COLS;c++){
+        if(bombs.contains(buttons[r][c])){
+         buttons[r][c].setLabel("B"); 
+        }
+      }
+    }
 }
 public void displayWinningMessage()
 {
@@ -106,7 +104,7 @@ public class MSButton
           marked = true;
         }
         else if(bombs.contains(this)){
-          
+          displayLosingMessage();
         }
         else if(countBombs(r,c) > 0){
           int num = countBombs(r,c);
@@ -202,3 +200,4 @@ public class MSButton
         return numBombs;
     }
 }
+
