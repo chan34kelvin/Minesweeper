@@ -9,7 +9,7 @@ private ArrayList <MSButton> bombs;
 //private ArrayList <MSButton> bombs= new ArrayList <MSButton>();
 void setup ()
 {
-    size(400, 500);
+    size(400, 400);
     textAlign(CENTER,CENTER);
     
     // make the manager
@@ -44,7 +44,14 @@ public void draw ()
 }
 public boolean isWon()
 {
-    //your code here
+    int bombWin = 0;
+    for (int i = 0; i < bombs.size(); i++)  
+    {
+        if (bombs.get(i).isMarked())
+            bombWin++;
+    }
+    if (bombWin == bombs.size())
+        return true;
     return false;
 }
 public void displayLosingMessage()
@@ -56,10 +63,24 @@ public void displayLosingMessage()
         }
       }
     }
+    for (int b = 0; b < bombs.size(); b++){
+    if (bombs.get(b).isMarked() == false){
+      bombs.get(b).clicked = true;
+    }
+   }
+   String loseDeath = new String("You Lose!");
+    for (int i = 0; i < loseDeath.length(); i++)
+    {
+        buttons[NUM_ROWS/2][(NUM_COLS/2) - 5 + i].setLabel(loseDeath.substring(i, i+1));
+    }
 }
 public void displayWinningMessage()
 {
-    //your code here
+    String winSurvive = new String("You Win!");
+    for (int i = 0; i < winSurvive.length(); i++)
+    {
+        buttons[NUM_ROWS/2][(NUM_COLS/2) - 5 + i].setLabel(winSurvive.substring(i, i+1));
+    }
 }
 
 public class MSButton
@@ -95,16 +116,14 @@ public class MSButton
     public void mousePressed () 
     {
         clicked = true;
-        if(keyPressed==true && marked == true)
+        if (mouseButton == RIGHT)//defuse 
         {
-          marked = false;
+            marked = !marked;
+            if (marked == false)
+                clicked = false;
         }
-        else if(keyPressed ==true && marked == false)
-        {
-          marked = true;
-        }
-        else if(bombs.contains(this)){
-          displayLosingMessage();
+        else if (bombs.contains(this) && marked==false){
+            displayLosingMessage();
         }
         else if(countBombs(r,c) > 0){
           int num = countBombs(r,c);
@@ -125,17 +144,17 @@ public class MSButton
           if(this.isValid(r-1,c)==true && buttons[r-1][c].clicked==false)
             buttons[r-1][c].mousePressed();
           
-          if(this.isValid(r+1,c-1)==true && buttons[r+1][c-1].clicked==false)
-            buttons[r+1][c-1].mousePressed();
+          //if(this.isValid(r+1,c-1)==true && buttons[r+1][c-1].clicked==false)
+          //  buttons[r+1][c-1].mousePressed();
           
-          if(this.isValid(r-1,c-1)==true && buttons[r-1][c-1].clicked==false)
-            buttons[r-1][c-1].mousePressed();
+          //if(this.isValid(r-1,c-1)==true && buttons[r-1][c-1].clicked==false)
+          //  buttons[r-1][c-1].mousePressed();
           
-          if(this.isValid(r+1,c+1)==true && buttons[r+1][c+1].clicked==false)
-            buttons[r+1][c+1].mousePressed();
+          //if(this.isValid(r+1,c+1)==true && buttons[r+1][c+1].clicked==false)
+          //  buttons[r+1][c+1].mousePressed();
           
-          if(this.isValid(r-1,c+1)==true && buttons[r-1][c+1].clicked==false)
-            buttons[r-1][c+1].mousePressed();
+          //if(this.isValid(r-1,c+1)==true && buttons[r-1][c+1].clicked==false)
+          //  buttons[r-1][c+1].mousePressed();
           
         } 
     }
@@ -157,6 +176,7 @@ public class MSButton
     }
     public void setLabel(String newLabel)
     {
+        
         label = newLabel;
     }
     public boolean isValid(int r, int c)
